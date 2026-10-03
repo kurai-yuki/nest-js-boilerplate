@@ -1,0 +1,31 @@
+services:
+  app:
+    hostname: 'nestjs-boilerplate' # Change for the aplication name
+    restart: 'unless-stopped'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs-boilerplate
+    environment:
+      - PORT=${PORT}
+    ports:
+      - '${PORT}:${PORT}'
+      - '${DEBUG_PORT}:${DEBUG_PORT}'
+    volumes:
+      - ./src:/app/src
+    command: npm run start:debug
+
+  db:
+    image: postgres
+    restart: always
+    container_name: postgres-database
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: mydb
+    ports:
+      - 5432:5432
+
+networks:
+  main:
+    driver: bridge
